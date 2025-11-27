@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/placeOrder"
+  },
+  "response": {
+    "status": 201,
+    "headers": { "Content-Type": "application/json" },
+    "bodyFileName": "place-order-response.json"
+  }
+}
