@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="2" passed="1" failed="1" skipped="0">
+<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-11-28T00:15:00 UTC" name="CMOrderSuite" finished-at="2025-11-28T00:15:06 UTC" duration-ms="5867">
+  <suite started-at="2025-11-28T00:20:29 UTC" name="Surefire suite" finished-at="2025-11-28T00:20:30 UTC" duration-ms="1404">
     <groups>
     </groups>
-    <test started-at="2025-11-28T00:15:00 UTC" name="API Tests" finished-at="2025-11-28T00:15:02 UTC" duration-ms="1495">
+    <test started-at="2025-11-28T00:20:29 UTC" name="Surefire test" finished-at="2025-11-28T00:20:30 UTC" duration-ms="1404">
       <class name="api.OrderApiTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-11-28T00:15:00 UTC" name="setup" finished-at="2025-11-28T00:15:01 UTC" duration-ms="305" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:api.OrderApiTest@16610890]" started-at="2025-11-28T00:20:29 UTC" name="setup" finished-at="2025-11-28T00:20:29 UTC" duration-ms="269" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="testPlaceOrderAndDbValidation()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-11-28T00:15:01 UTC" name="testPlaceOrderAndDbValidation" finished-at="2025-11-28T00:15:02 UTC" duration-ms="1136" status="FAIL">
+        <test-method signature="testPlaceOrderAndDbValidation()[pri:0, instance:api.OrderApiTest@16610890]" started-at="2025-11-28T00:20:29 UTC" name="testPlaceOrderAndDbValidation" finished-at="2025-11-28T00:20:30 UTC" duration-ms="1080" status="FAIL">
           <exception class="org.postgresql.util.PSQLException">
             <message>
               <![CDATA[ERROR: duplicate key value violates unique constraint "orders_order_id_key"
@@ -44,12 +44,23 @@ at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
 at org.testng.TestRunner.privateRun(TestRunner.java:848)
 at org.testng.TestRunner.run(TestRunner.java:621)
 at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:481)
-at org.testng.internal.thread.ThreadUtil.lambda$execute$0(ThreadUtil.java:58)
-at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
-at java.base/java.lang.Thread.run(Thread.java:840)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1280)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1200)
+at org.testng.TestNG.runSuites(TestNG.java:1114)
+at org.testng.TestNG.run(TestNG.java:1082)
+at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:151)
+at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeSingleClass(TestNGDirectoryTestSuite.java:111)
+at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:98)
+at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:155)
+at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:456)
+at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:169)
+at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
+at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
 ]]>
             </full-stacktrace>
           </exception> <!-- org.postgresql.util.PSQLException -->
@@ -57,26 +68,6 @@ at java.base/java.lang.Thread.run(Thread.java:840)
           </reporter-output>
         </test-method> <!-- testPlaceOrderAndDbValidation -->
       </class> <!-- api.OrderApiTest -->
-    </test> <!-- API Tests -->
-    <test started-at="2025-11-28T00:15:00 UTC" name="UI Tests" finished-at="2025-11-28T00:15:06 UTC" duration-ms="5867">
-      <class name="ui.PlaceOrderUiTest">
-        <test-method is-config="true" signature="beforeClass()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:00 UTC" name="beforeClass" finished-at="2025-11-28T00:15:00 UTC" duration-ms="10" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- beforeClass -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:00 UTC" name="setUp" finished-at="2025-11-28T00:15:05 UTC" duration-ms="4366" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="placeOrderUi()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:05 UTC" name="placeOrderUi" finished-at="2025-11-28T00:15:06 UTC" duration-ms="1306" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- placeOrderUi -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:06 UTC" name="tearDown" finished-at="2025-11-28T00:15:06 UTC" duration-ms="156" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- tearDown -->
-      </class> <!-- ui.PlaceOrderUiTest -->
-    </test> <!-- UI Tests -->
-  </suite> <!-- CMOrderSuite -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
 </testng-results>
