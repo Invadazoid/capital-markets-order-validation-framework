@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="2" passed="1" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-11-28T00:05:15 UTC" name="CMOrderSuite" finished-at="2025-11-28T00:05:17 UTC" duration-ms="2799">
+  <suite started-at="2025-11-28T00:15:00 UTC" name="CMOrderSuite" finished-at="2025-11-28T00:15:06 UTC" duration-ms="5867">
     <groups>
     </groups>
-    <test started-at="2025-11-28T00:05:15 UTC" name="API Tests" finished-at="2025-11-28T00:05:16 UTC" duration-ms="1320">
+    <test started-at="2025-11-28T00:15:00 UTC" name="API Tests" finished-at="2025-11-28T00:15:02 UTC" duration-ms="1495">
       <class name="api.OrderApiTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-11-28T00:05:15 UTC" name="setup" finished-at="2025-11-28T00:05:15 UTC" duration-ms="238" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-11-28T00:15:00 UTC" name="setup" finished-at="2025-11-28T00:15:01 UTC" duration-ms="305" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="testPlaceOrderAndDbValidation()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-11-28T00:05:15 UTC" name="testPlaceOrderAndDbValidation" finished-at="2025-11-28T00:05:16 UTC" duration-ms="1014" status="FAIL">
+        <test-method signature="testPlaceOrderAndDbValidation()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-11-28T00:15:01 UTC" name="testPlaceOrderAndDbValidation" finished-at="2025-11-28T00:15:02 UTC" duration-ms="1136" status="FAIL">
           <exception class="org.postgresql.util.PSQLException">
             <message>
               <![CDATA[ERROR: duplicate key value violates unique constraint "orders_order_id_key"
@@ -58,21 +58,21 @@ at java.base/java.lang.Thread.run(Thread.java:840)
         </test-method> <!-- testPlaceOrderAndDbValidation -->
       </class> <!-- api.OrderApiTest -->
     </test> <!-- API Tests -->
-    <test started-at="2025-11-28T00:05:15 UTC" name="UI Tests" finished-at="2025-11-28T00:05:17 UTC" duration-ms="2799">
+    <test started-at="2025-11-28T00:15:00 UTC" name="UI Tests" finished-at="2025-11-28T00:15:06 UTC" duration-ms="5867">
       <class name="ui.PlaceOrderUiTest">
-        <test-method is-config="true" signature="beforeClass()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:05:15 UTC" name="beforeClass" finished-at="2025-11-28T00:05:15 UTC" duration-ms="10" status="PASS">
+        <test-method is-config="true" signature="beforeClass()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:00 UTC" name="beforeClass" finished-at="2025-11-28T00:15:00 UTC" duration-ms="10" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:05:15 UTC" name="setUp" finished-at="2025-11-28T00:05:16 UTC" duration-ms="1382" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:00 UTC" name="setUp" finished-at="2025-11-28T00:15:05 UTC" duration-ms="4366" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="placeOrderUi()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:05:16 UTC" name="placeOrderUi" finished-at="2025-11-28T00:05:17 UTC" duration-ms="1274" status="PASS">
+        <test-method signature="placeOrderUi()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:05 UTC" name="placeOrderUi" finished-at="2025-11-28T00:15:06 UTC" duration-ms="1306" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- placeOrderUi -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:05:17 UTC" name="tearDown" finished-at="2025-11-28T00:05:17 UTC" duration-ms="103" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-11-28T00:15:06 UTC" name="tearDown" finished-at="2025-11-28T00:15:06 UTC" duration-ms="156" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
