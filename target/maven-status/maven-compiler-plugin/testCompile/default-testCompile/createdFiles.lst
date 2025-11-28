@@ -1,2 +1,4 @@
+utils/TestUtils.class
 ui/PlaceOrderUiTest.class
+base/BaseTest.class
 api/OrderApiTest.class
