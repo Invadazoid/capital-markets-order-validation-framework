@@ -1,5 +1,5 @@
 {
-  "orderId": "ORD-{{now offset='0' format='yyyyMMddHHmmss'}}",
+  "orderId": "ORD-{{now format='yyyyMMddHHmmss'}}",
   "status": "ACCEPTED",
   "symbol": "ABC",
   "qty": 10

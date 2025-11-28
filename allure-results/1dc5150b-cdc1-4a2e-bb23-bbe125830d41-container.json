@@ -1,0 +1,1 @@
+{"uuid":"1dc5150b-cdc1-4a2e-bb23-bbe125830d41","name":"ui.PlaceOrderUiTest.setUp","children":["74e023f9-142d-4b27-bc41-84bb7074f1f9"],"description":"","befores":[{"name":"setUp","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1764282371584,"stop":1764282376539}],"afters":[],"start":1764282371583,"stop":1764282376539}
