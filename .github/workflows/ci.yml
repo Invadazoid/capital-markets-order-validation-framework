@@ -1,57 +1,143 @@
-name: CI Tests
+name: CI — Full test suite (Maven + Frontend + Playwright)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
+    branches: [ main, master ]
 
 jobs:
-  build-and-test:
+  full-test:
     runs-on: ubuntu-latest
+
+    # Start a Postgres service for tests
     services:
       postgres:
-        image: postgres:14
+        image: postgres:15
         env:
-          POSTGRES_DB: captest
           POSTGRES_USER: capuser
           POSTGRES_PASSWORD: cap@123
+          POSTGRES_DB: captest
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd="pg_isready -U capuser -d captest"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      DB_URL: jdbc:postgresql://localhost:5432/captest
+      DB_USER: capuser
+      DB_PASS: cap@123
+      WIREMOCK_BASE: http://localhost:8080
+      UI_BASE: http://localhost:3000
+      MAVEN_OPTS: -Xmx2g
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: 17
 
-      - name: Wait for Postgres
-        run: sleep 10
+      - name: Cache Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-      - name: Start WireMock
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Start WireMock container (mappings from repo)
         run: |
-          wget https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.35.0/wiremock-standalone-2.35.0.jar
-          java -jar wiremock-standalone-2.35.0.jar --port 8080 --root-dir wiremock &
+          docker rm -f wiremock 2>/dev/null || true
+          docker run -d --name wiremock -p 8080:8080 \
+            -v "${{ github.workspace }}/wiremock":/home/wiremock \
+            wiremock/wiremock:2.35.0 --root-dir /home/wiremock --global-response-templating --verbose
+          for i in $(seq 1 20); do
+            curl -sSf http://localhost:8080/__admin/mappings >/dev/null && break || sleep 1
+          done
+        timeout-minutes: 2
 
-      - name: Run DB schema
-        env:
-          PGPASSWORD: cap@123
+      - name: Wait for Postgres to be ready
         run: |
-          sleep 5
-          psql -h localhost -U capuser -d captest -c "CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, order_id varchar(50) UNIQUE, symbol varchar(10), qty int, status varchar(20), created_at timestamp default now());"
+          echo "Waiting for Postgres service..."
+          for i in $(seq 1 30); do
+            pg_isready -h localhost -p 5432 -U capuser -d captest && break
+            sleep 2
+          done
 
-      - name: Run tests
-        run: mvn -B -DskipTests=false test
+      - name: Run Maven API + DB tests
+        run: |
+          mvn -B -Ddb.url=${{ env.DB_URL }} -Ddb.user=${{ env.DB_USER }} -Ddb.password="${{ env.DB_PASS }}" \
+            -Dwiremock.base=${{ env.WIREMOCK_BASE }} test
+        timeout-minutes: 20
 
-      - name: Upload Allure results
+      - name: Upload surefire test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: target/allure-results
+          name: surefire-reports
+          path: target/surefire-reports
+
+      - name: Build frontend (install & build)
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+        timeout-minutes: 10
+
+      - name: Start frontend preview (background) and wait
+        working-directory: frontend
+        run: |
+          # start Vite preview binding to localhost to avoid IPv6/IPv4 mismatches
+          npm run preview -- --port 3000 --host 127.0.0.1 > /tmp/vite-preview.log 2>&1 & echo $! > /tmp/vite-preview.pid
+          for i in $(seq 1 20); do
+            curl -sSf http://127.0.0.1:3000/ >/dev/null && break || sleep 1
+          done
+          echo "Frontend preview ready"
+        timeout-minutes: 5
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: |
+          npx playwright install --with-deps
+        timeout-minutes: 10
+
+      - name: Run Playwright UI tests
+        working-directory: frontend
+        env:
+          UI_BASE: ${{ env.UI_BASE }}
+        run: |
+          npx playwright test --config=playwright.config.mjs --reporter=list
+        timeout-minutes: 15
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            frontend/test-results
+            frontend/playwright-report
+            frontend/*.zip
+            frontend/trace-*.zip
+
+      - name: Stop preview
+        if: always()
+        working-directory: frontend
+        run: |
+          [ -f /tmp/vite-preview.pid ] && kill $(cat /tmp/vite-preview.pid) || true
+          docker rm -f wiremock 2>/dev/null || true
