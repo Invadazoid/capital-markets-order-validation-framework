@@ -4,6 +4,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -14,60 +15,131 @@ jobs:
         env:
           POSTGRES_DB: captest
           POSTGRES_USER: capuser
-          POSTGRES_PASSWORD: cap@123
+          POSTGRES_PASSWORD: cap123
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
           java-version: '11'
+          distribution: 'temurin'
 
-      - name: Set up Node.js
+      - name: Set up Node.js (for frontend / static server and Playwright if needed)
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
 
-      - name: Install Chromium
+      - name: Install system deps (psql, jq, wget)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client jq wget
+
+      - name: Wait for Postgres to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if pg_isready -h localhost -p 5432; then
+              echo "Postgres is ready"
+              break
+            fi
+            echo "Waiting for postgres... ($i)"
+            sleep 5
+          done
+          pg_isready -h localhost -p 5432
+
+      - name: Start WireMock (Docker)
+        run: |
+          # ensure any previous container removed
+          docker rm -f cm-wiremock 2>/dev/null || true
+
+          # start WireMock container with your project wiremock folder mounted
+          docker run -d --name cm-wiremock \
+            -p 8080:8080 \
+            -v "$(pwd)/wiremock:/home/wiremock:ro" \
+            wiremock/wiremock:latest \
+            --root-dir=/home/wiremock \
+            --verbose
+
+          # wait for WireMock admin API
+          for i in $(seq 1 20); do
+            if curl -sS http://localhost:8080/__admin/mappings > /dev/null 2>&1; then
+              echo "WireMock admin responding"
+              break
+            fi
+            echo "Waiting for WireMock... ($i)"
+            sleep 2
+          done
+
+          # show loaded mapping count and a sample POST response for quick verification (non-fatal)
+          echo "Loaded mappings:"
+          curl -s http://localhost:8080/__admin/mappings | jq '.mappings | map({id:.id, name:.name, priority:.priority})' || true
+          echo "Sample POST /placeOrder response (may be empty if mapping requires body):"
+          curl -s -X POST http://localhost:8080/placeOrder -H "Content-Type: application/json" -d '{"symbol":"ABC","qty":10}' | jq '.' || true
+
+      - name: Serve frontend demo UI (optional)
+        working-directory: ${{ github.workspace }}/frontend
+        run: |
+          set -e
+          npm ci
+          npm start &
+          sleep 20
+          curl -f http://localhost:3000 | head -10
+
+      - name: Apply DB schema & seed (prefer repo files)
+        env:
+          PGPASSWORD: cap123
+        run: |
+          if [ -f db/schema.sql ]; then
+            echo "Applying db/schema.sql"
+            psql -h localhost -U capuser -d captest -f db/schema.sql
+          else
+            echo "db/schema.sql not found — creating minimal orders table"
+            psql -h localhost -U capuser -d captest -c "CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, order_id varchar(50) UNIQUE, symbol varchar(10), qty int, status varchar(20), created_at timestamptz DEFAULT now())"
+          fi
+          if [ -f db/seed.sql ]; then
+            echo "Applying db/seed.sql"
+            psql -h localhost -U capuser -d captest -f db/seed.sql
+          fi
+
+      - name: Confirm WireMock mappings loaded (retry)
+        run: |
+          for i in $(seq 1 10); do
+            curl -s http://localhost:8080/__admin/mappings -o /tmp/mappings.json || true
+            if [ -s /tmp/mappings.json ]; then
+              echo "WireMock mappings:"
+              cat /tmp/mappings.json | jq '.' || true
+              break
+            fi
+            echo "Waiting for WireMock mappings... ($i)"
+            sleep 1
+          done
+
+      - name: Install Chromium and ChromeDriver
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser chromium-chromedriver
+          # ensure chromedriver is symlinked into expected path if needed
+          if [ ! -f /usr/lib/chromium-browser/chromedriver ]; then
+            sudo mkdir -p /usr/lib/chromium-browser
+            sudo ln -s "$(which chromedriver || true)" /usr/lib/chromium-browser/chromedriver || true
+          fi
+          echo "CHROME_BIN=$(which chromium-browser || which chromium)" >> $GITHUB_ENV
+          echo "CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver" >> $GITHUB_ENV
 
-      - name: Wait for Postgres
-        run: sleep 10
-
-      - name: Start WireMock
-        run: |
-          wget https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.35.0/wiremock-standalone-2.35.0.jar
-          java -jar wiremock-standalone-2.35.0.jar --port 8080 --root-dir wiremock &
-          sleep 10
-          curl -s http://localhost:8080/__admin/mappings | jq '.mappings | length' > /dev/null
-
-      - name: Run DB schema
+      - name: Run Maven tests (API + UI where applicable)
         env:
-          PGPASSWORD: cap@123
+          PGPASSWORD: cap123
         run: |
-          sleep 5
-          psql -h localhost -U capuser -d captest -f db/schema.sql
-          psql -h localhost -U capuser -d captest -f db/seed.sql
-
-      - name: Start UI server
-        run: |
-          cd frontend
-          npm install
-          npm start &
-          sleep 10
-
-      - name: Run tests
-        run: mvn -B -DskipTests=false test -Dwiremock.base=http://localhost:8080 -Dui.url=http://localhost:3000 -Ddb.url=jdbc:postgresql://localhost:5432/captest -Ddb.user=capuser -Ddb.password=cap@123
+          mvn -B -DskipTests=false test \
+            -Ddb.url=jdbc:postgresql://localhost:5432/captest \
+            -Ddb.user=capuser \
+            -Ddb.password=cap123 \
+            -Dwiremock.base=http://localhost:8080 \
+            -Dui.url=http://localhost:3000
 
       - name: Upload Allure results
         if: always()
@@ -75,3 +147,9 @@ jobs:
         with:
           name: allure-results
           path: target/allure-results
+
+      - name: Cleanup WireMock container
+        if: always()
+        run: |
+          docker rm -f cm-wiremock 2>/dev/null || true
+
