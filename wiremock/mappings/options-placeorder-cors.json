@@ -1,0 +1,15 @@
+{
+  "priority": 10,
+  "name": "CORS preflight for placeOrder (catch-all)",
+  "request": { "method": "OPTIONS", "urlPattern": "^/placeOrder(?:\\?.*)?$" },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, X-Requested-With, Accept, Authorization, X-ORDER-ID",
+      "Access-Control-Max-Age": "86400"
+    },
+    "body": ""
+  }
+}
