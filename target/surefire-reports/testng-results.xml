@@ -2,36 +2,36 @@
 <testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-12-03T17:30:38 UTC" name="CMOrderSuite" finished-at="2025-12-03T17:30:41 UTC" duration-ms="2909">
+  <suite started-at="2025-12-03T21:16:50 UTC" name="CMOrderSuite" finished-at="2025-12-03T21:16:53 UTC" duration-ms="2911">
     <groups>
     </groups>
-    <test started-at="2025-12-03T17:30:38 UTC" name="API Tests" finished-at="2025-12-03T17:30:40 UTC" duration-ms="1412">
+    <test started-at="2025-12-03T21:16:50 UTC" name="API Tests" finished-at="2025-12-03T21:16:51 UTC" duration-ms="1296">
       <class name="api.OrderApiTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-12-03T17:30:38 UTC" name="setup" finished-at="2025-12-03T17:30:38 UTC" duration-ms="238" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-12-03T21:16:50 UTC" name="setup" finished-at="2025-12-03T21:16:50 UTC" duration-ms="229" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="testPlaceOrderAndDbValidation()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-12-03T17:30:38 UTC" name="testPlaceOrderAndDbValidation" finished-at="2025-12-03T17:30:40 UTC" duration-ms="1097" status="PASS">
+        <test-method signature="testPlaceOrderAndDbValidation()[pri:0, instance:api.OrderApiTest@1e0b4072]" started-at="2025-12-03T21:16:50 UTC" name="testPlaceOrderAndDbValidation" finished-at="2025-12-03T21:16:51 UTC" duration-ms="996" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testPlaceOrderAndDbValidation -->
       </class> <!-- api.OrderApiTest -->
     </test> <!-- API Tests -->
-    <test started-at="2025-12-03T17:30:38 UTC" name="UI Tests" finished-at="2025-12-03T17:30:41 UTC" duration-ms="2909">
+    <test started-at="2025-12-03T21:16:50 UTC" name="UI Tests" finished-at="2025-12-03T21:16:53 UTC" duration-ms="2911">
       <class name="ui.PlaceOrderUiTest">
-        <test-method is-config="true" signature="beforeClass()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T17:30:38 UTC" name="beforeClass" finished-at="2025-12-03T17:30:38 UTC" duration-ms="11" status="PASS">
+        <test-method is-config="true" signature="beforeClass()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T21:16:50 UTC" name="beforeClass" finished-at="2025-12-03T21:16:50 UTC" duration-ms="9" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeClass -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T17:30:38 UTC" name="setUp" finished-at="2025-12-03T17:30:40 UTC" duration-ms="1467" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T21:16:50 UTC" name="setUp" finished-at="2025-12-03T21:16:52 UTC" duration-ms="1432" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="placeOrderUi()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T17:30:40 UTC" name="placeOrderUi" finished-at="2025-12-03T17:30:41 UTC" duration-ms="1301" status="PASS">
+        <test-method signature="placeOrderUi()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T21:16:52 UTC" name="placeOrderUi" finished-at="2025-12-03T21:16:53 UTC" duration-ms="1338" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- placeOrderUi -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T17:30:41 UTC" name="tearDown" finished-at="2025-12-03T17:30:41 UTC" duration-ms="103" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:ui.PlaceOrderUiTest@793f29ff]" started-at="2025-12-03T21:16:53 UTC" name="tearDown" finished-at="2025-12-03T21:16:53 UTC" duration-ms="103" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
