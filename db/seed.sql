@@ -1,1 +1,1 @@
-INSERT INTO orders (order_id, symbol, qty, status) VALUES ('ORD-INIT-1','ABC',10,'PENDING') ON CONFLICT DO NOTHING;
+INSERT INTO orders (order_id, symbol, qty, side, status, created_at) VALUES ('ORD-INIT-1', 'ABC', 10, 'BUY', 'PENDING', '2025-11-30 16:32:56.679606');

@@ -31,6 +31,16 @@ jobs:
         with:
           java-version: '11'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+
       - name: Wait for Postgres
         run: sleep 10
 
@@ -38,16 +48,26 @@ jobs:
         run: |
           wget https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.35.0/wiremock-standalone-2.35.0.jar
           java -jar wiremock-standalone-2.35.0.jar --port 8080 --root-dir wiremock &
+          sleep 10
+          curl -s http://localhost:8080/__admin/mappings | jq '.mappings | length' > /dev/null
 
       - name: Run DB schema
         env:
           PGPASSWORD: cap@123
         run: |
           sleep 5
-          psql -h localhost -U capuser -d captest -c "CREATE TABLE IF NOT EXISTS orders (id serial PRIMARY KEY, order_id varchar(50) UNIQUE, symbol varchar(10), qty int, status varchar(20), created_at timestamp default now());"
+          psql -h localhost -U capuser -d captest -f db/schema.sql
+          psql -h localhost -U capuser -d captest -f db/seed.sql
+
+      - name: Start UI server
+        run: |
+          cd frontend
+          npm install
+          npm start &
+          sleep 10
 
       - name: Run tests
-        run: mvn -B -DskipTests=false test
+        run: mvn -B -DskipTests=false test -Dwiremock.base=http://localhost:8080 -Dui.url=http://localhost:3000 -Ddb.url=jdbc:postgresql://localhost:5432/captest -Ddb.user=capuser -Ddb.password=cap@123
 
       - name: Upload Allure results
         if: always()

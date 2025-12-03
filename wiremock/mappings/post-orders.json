@@ -1,0 +1,16 @@
+{
+  "priority": 1,
+  "name": "placeOrder POST - templated + CORS (unique orderId)",
+  "request": { "method": "POST", "urlPath": "/placeOrder" },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, X-ORDER-ID"
+    },
+    "body": "{\n \"orderId\": \"order-{{now format='yyyyMMddHHmmssSSS'}}-{{randomValue length=6 type='ALPHANUM'}}\",\n \"symbol\": \"{{jsonPath request.body '$.symbol'}}\",\n \"qty\": {{jsonPath request.body '$.qty'}},\n \"side\": \"{{jsonPath request.body '$.side'}}\",\n \"status\": \"ACCEPTED\"\n}",
+    "transformers": ["response-template"]
+  }
+}

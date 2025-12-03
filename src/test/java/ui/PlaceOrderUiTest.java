@@ -5,6 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.*;
+import org.testng.annotations.BeforeSuite;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 import java.time.Duration;
 
