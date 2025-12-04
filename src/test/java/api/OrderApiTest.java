@@ -34,7 +34,7 @@ public class OrderApiTest {
         String orderId = resp.jsonPath().getString("orderId");
         assertNotNull(orderId, "orderId should not be null");
 
-        // 2) Simulate a downstream DB write (for demo). In real infra this would be done by service.
+        // 2) Insert a record into the DB to simulate order processing
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO orders(order_id, symbol, qty, status) VALUES(?,?,?,?)");

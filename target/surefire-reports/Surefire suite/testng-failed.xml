@@ -3,12 +3,14 @@
 <suite name="Failed suite [Surefire suite]" verbose="0">
   <test thread-count="5" name="Surefire test(failed)" verbose="0">
     <classes>
-      <class name="api.OrderApiTest">
+      <class name="ui.PlaceOrderUiTest">
         <methods>
-          <include name="setup"/>
-          <include name="testPlaceOrderAndDbValidation"/>
+          <include name="beforeClass"/>
+          <include name="placeOrderUi"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
         </methods>
-      </class> <!-- api.OrderApiTest -->
+      </class> <!-- ui.PlaceOrderUiTest -->
     </classes>
   </test> <!-- Surefire test(failed) -->
 </suite> <!-- Failed suite [Surefire suite] -->

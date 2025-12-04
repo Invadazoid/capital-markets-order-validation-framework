@@ -4,13 +4,11 @@ test("place order shows status and order in list (debugging)", async ({
   page,
   playwright,
 }) => {
-  // debug helpers
 
   const tried = [];
 
   const log = (tag, ...args) => console.log(`[PW][${tag}]`, ...args);
 
-  // attach listeners
 
   page.on("console", (msg) => log("console", msg.type(), msg.text()));
 
@@ -29,9 +27,6 @@ test("place order shows status and order in list (debugging)", async ({
 
   page.on("response", (resp) => log("response", resp.status(), resp.url()));
 
-  // Try unregistering service workers / clear cache before navigation
-
-  // create a fresh context (ensures no persistent storage)
 
   const context = await playwright.chromium.launchPersistentContext("", {
     headless: true,
@@ -40,10 +35,9 @@ test("place order shows status and order in list (debugging)", async ({
   const debugPage = await context.newPage();
 
   try {
-    // ensure no service workers (best-effort)
 
     await debugPage.goto("about:blank");
-
+    
     await debugPage
       .evaluate(async () => {
         try {
@@ -114,13 +108,10 @@ test("place order shows status and order in list (debugging)", async ({
           .waitForLoadState("networkidle", { timeout: 5000 })
           .catch(() => {});
 
-        // show a tiny bit of DOM
-
         const title = await debugPage.title().catch(() => "<no-title>");
 
         log("title", title);
-
-        // done — we can run real interactions here if needed
+        
 
         success = true;
 
