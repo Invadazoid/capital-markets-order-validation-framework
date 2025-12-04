@@ -1,8 +1,10 @@
 # 🚀 Capital Markets Order Validation Framework
 End-to-End QA/SDET Automation Project (UI + API + DB + WireMock + Playwright + k6 + CI)
 
+
 ## 📹 Demo (Loom)
-📽 https://www.loom.com/share/9a209f7cdbc147c487c42abebee3dfea
+📽 [![Demo Loom Link](https://github.com/Invadazoid/capital-markets-order-validation-framework/blob/master/Loom_Thumbnail.png?raw=true)](https://www.loom.com/share/9a209f7cdbc147c487c42abebee3dfea)
+
 
 ## 📘 Overview
 
@@ -198,5 +200,6 @@ Pipeline badge is at the top of this README.
 
 ## 🧾 License
 MIT License
+
 
 
