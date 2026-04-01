@@ -80,6 +80,11 @@ npx playwright install
 npx playwright test
 cd ..
 
+Tests included:
+- Place order and verify status message shows ACCEPTED
+- Place order and verify it appears in the recent orders table
+- Place multiple orders and verify they accumulate in the table
+
 11) Install k6 (Performance Testing)
 
 Ubuntu/Debian:

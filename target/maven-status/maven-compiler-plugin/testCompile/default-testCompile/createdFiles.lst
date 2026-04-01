@@ -1,2 +1,2 @@
-ui/PlaceOrderUiTest.class
-api/OrderApiTest.class
+api\OrderApiTest.class
+ui\PlaceOrderUiTest.class

@@ -4,11 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
-import org.testng.annotations.BeforeSuite;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 
 import java.time.Duration;
 
@@ -46,7 +44,7 @@ public class PlaceOrderUiTest {
     }
 
     @Test
-    public void placeOrderUi() throws InterruptedException {
+    public void placeOrderUi() {
         String url = System.getProperty("ui.url", "http://localhost:3000/place-order");
         driver.get(url);
 
@@ -56,11 +54,13 @@ public class PlaceOrderUiTest {
         driver.findElement(By.id("qty")).sendKeys("10");
         driver.findElement(By.id("placeOrderBtn")).click();
 
-        // short wait for UI update
-        Thread.sleep(1000);
+        // Wait for status message to update
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.id("statusMessage"), "ACCEPTED"));
 
         String msg = driver.findElement(By.id("statusMessage")).getText();
-        assertTrue(msg.toLowerCase().contains("accepted") || msg.toLowerCase().contains("order"), "Status message should indicate success");
+        assertTrue(msg.toLowerCase().contains("accepted"), "Status message should indicate success");
     }
 
     @AfterMethod

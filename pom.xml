@@ -91,6 +91,7 @@
             <db.url>jdbc:postgresql://localhost:5432/captest</db.url>
             <db.user>capuser</db.user>
             <db.password>cap@123</db.password>
+            <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
           </systemPropertyVariables>
         </configuration>
       </plugin>

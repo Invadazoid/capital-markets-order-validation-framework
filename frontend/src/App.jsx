@@ -20,17 +20,11 @@ export default function App() {
       side
     };
 
-    // SYNCHRONOUS: write immediate final-like status so tests see something deterministic
+    // Show immediate status so the UI is responsive
     const syncStatus = `Order ${payload.orderId} ACCEPTED`;
-    try {
-      setStatusMsg(syncStatus);
-      const _s = document.getElementById("statusMessage");
-      if (_s) _s.innerText = syncStatus;
-    } catch (err) {
-      // noop
-    }
+    setStatusMsg(syncStatus);
 
-    // Reset lastOrder visual (we already showed syncStatus)
+    // Reset lastOrder visual
     setLastOrder(null);
 
     // Send request
@@ -44,35 +38,22 @@ export default function App() {
 
       if (!resp.ok) {
         const txt = await resp.text().catch(() => "");
-        const errMsg = `Error: ${resp.status} ${txt}`;
-        setStatusMsg(errMsg);
-        const _s = document.getElementById("statusMessage");
-        if (_s) _s.innerText = errMsg;
+        setStatusMsg(`Error: ${resp.status} ${txt}`);
         return;
       }
 
       const data = await resp.json().catch(() => null);
       if (!data) {
-        const msg = "Placed but response JSON parse failed";
-        setStatusMsg(msg);
-        const _s = document.getElementById("statusMessage");
-        if (_s) _s.innerText = msg;
+        setStatusMsg("Placed but response JSON parse failed");
         return;
       }
 
-      // FINAL: construct canonical success string and write synchronously
+      // Construct canonical success string
       const finalStatus = `Order ${data.orderId || payload.orderId} ${(
         data.status || "ACCEPTED"
       ).toString().toUpperCase()}`.trim();
 
       setStatusMsg(finalStatus);
-      try {
-        const _s = document.getElementById("statusMessage");
-        if (_s) _s.innerText = finalStatus;
-      } catch (err) {
-        // noop
-      }
-
       setLastOrder(data);
 
       // Append to recent orders (newest first), keep last 12
@@ -86,10 +67,7 @@ export default function App() {
       };
       setRecentOrders((prev) => [row, ...prev].slice(0, 12));
     } catch (err) {
-      const msg = "Network error: " + (err?.message || err);
-      setStatusMsg(msg);
-      const _s = document.getElementById("statusMessage");
-      if (_s) _s.innerText = msg;
+      setStatusMsg("Network error: " + (err?.message || err));
     }
   }
 

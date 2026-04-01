@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS orders (
   order_id VARCHAR(50) UNIQUE,
   symbol VARCHAR(10),
   qty INT,
-  side VARCHAR(10),
+  side VARCHAR(10) DEFAULT 'BUY',
   status VARCHAR(20),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
