@@ -39,7 +39,7 @@ jobs:
             -p 8080:8080 \
             -v "${{ github.workspace }}/wiremock:/home/wiremock" \
             wiremock/wiremock:2.35.0 \
-            --root-dir /home/wiremock --verbose
+            --root-dir /home/wiremock --verbose --global-response-templating
           echo "Waiting for WireMock to start..."
           for i in $(seq 1 30); do
             if curl -s http://localhost:8080/__admin/mappings >/dev/null 2>&1; then
@@ -143,6 +143,13 @@ jobs:
           # expose CHROME binary env var
           echo "CHROME_BIN=$(which chromium-browser || which chromium)" >> $GITHUB_ENV
           echo "CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver" >> $GITHUB_ENV
+
+      - name: Debug - test WireMock response
+        run: |
+          echo "Testing WireMock placeOrder endpoint..."
+          curl -v -X POST http://localhost:8080/placeOrder \
+            -H "Content-Type: application/json" \
+            -d '{"symbol":"ABC","qty":10,"side":"BUY"}' 2>&1 || true
 
       - name: Run Maven tests (API + UI where applicable)
         env:
