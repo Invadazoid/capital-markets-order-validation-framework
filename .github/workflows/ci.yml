@@ -21,7 +21,6 @@ jobs:
           - 8080:8080
         volumes:
           - ${{ github.workspace }}/wiremock:/home/wiremock
-        options: "--root-dir /home/wiremock --verbose"
       postgres:
         image: postgres:14
         env:
