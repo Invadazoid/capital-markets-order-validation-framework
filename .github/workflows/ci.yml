@@ -144,13 +144,6 @@ jobs:
           echo "CHROME_BIN=$(which chromium-browser || which chromium)" >> $GITHUB_ENV
           echo "CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver" >> $GITHUB_ENV
 
-      - name: Debug - test WireMock response
-        run: |
-          echo "Testing WireMock placeOrder endpoint..."
-          curl -v -X POST http://localhost:8080/placeOrder \
-            -H "Content-Type: application/json" \
-            -d '{"symbol":"ABC","qty":10,"side":"BUY"}' 2>&1 || true
-
       - name: Run Maven tests (API + UI where applicable)
         env:
           PGPASSWORD: cap@123
