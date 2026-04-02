@@ -1,0 +1,25 @@
+# Maven
+target/
+
+# Node
+node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Allure (local runs)
+allure-results/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+
+# Environment
+.env
+.env.local

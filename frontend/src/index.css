@@ -1,68 +1,48 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+@theme {
+  --color-surface-primary: #101214;
+  --color-surface-card: #151617;
+  --color-surface-input: #0f1112;
+  --color-border-default: #2b2b2b;
+  --color-border-input: #3a3a3a;
+  --color-accent-blue: #0b73ff;
+  --color-accent-blue-hover: #0960d4;
+  --color-accent-blue-active: #084fb3;
+  --color-accent-green: #22c55e;
+  --color-accent-red: #ef4444;
+  --color-text-primary: #f3f6fb;
+  --color-text-body: #e8eef8;
+  --color-text-label: #cbd5e1;
+  --color-text-muted: #93a0ad;
+  --color-text-heading: #dfe9f5;
+  --color-success: #4ade80;
+  --color-error: #f87171;
+  --color-toast-success-bg: rgba(34, 197, 94, 0.15);
+  --color-toast-error-bg: rgba(239, 68, 68, 0.15);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  body {
+    @apply bg-surface-primary text-text-body antialiased m-0 min-h-screen;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.2s ease-out forwards;
+}
+
+@utility animate-toast-in {
+  animation: toast-in 0.3s ease-out forwards;
 }
