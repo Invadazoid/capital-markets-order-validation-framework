@@ -24,7 +24,7 @@ public class OrderApiTest {
     @Test
     public void testPlaceOrderAndDbValidation() throws SQLException {
         // 1) Call the fake placeOrder API
-        String reqBody = "{ \"symbol\":\"ABC\", \"qty\":10 }";
+        String reqBody = "{ \"symbol\":\"ABC\", \"qty\":10, \"side\":\"BUY\" }";
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body(reqBody)
